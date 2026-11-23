@@ -1,49 +1,115 @@
-# Backtesting Journal Analyzing For Options (NSE)
+# 📊 Backtest & Trading Journal Analyzer
 
-![general video](https://user-images.githubusercontent.com/78555897/214491600-f3303aeb-da50-4711-a3a6-b41b65eb265f.gif)
+A quantitative trade-analytics and stress-testing dashboard built with **Python**, **Streamlit**, and **Plotly**. Upload up to 5 Excel trading journals to evaluate raw strategy performance side-by-side against **slippage-adjusted** and **Indian market transaction-cost-adjusted** returns—complete with equity curves, time-based breakdowns, and a **10,000-run Monte Carlo drawdown simulation**.
 
-I initially created this tool for personal use but I think it can benefit a lot of people. 
+![Python](https://img.shields.io/badge/Python-3.8%2B-blue?logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-App-FF4B4B?logo=streamlit&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-Data%20Analysis-150458?logo=pandas&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-Interactive%20Charts-3F4F75?logo=plotly&logoColor=white)
+[![Live Demo](https://img.shields.io/badge/Live%20Demo-Streamlit%20Cloud-brightgreen)](https://batjaoptions.streamlit.app)
 
-This tool specifically helps you to show a realistic backtest report / journal by adding slippages and near to real transaction costs (Brokerage, STT Charges, Stamp Duty, SEBI Charges, Exchange Charges, GST, etc). 
+---
 
-All the charges inputs are taken from zerodha’s charges page (https://zerodha.com/charges) and verified with zerodha’s brokerage calculator (https://zerodha.com/brokerage-calculator).
+## 📌 Overview
 
-# You can use the tool at https://batjaoptions.streamlit.app/
+Backtests often look profitable on paper until real-world execution friction—slippage, brokerage, taxes, and adverse trade sequencing—erodes the edge. **Backtest & Trading Journal Analyzer** bridges the gap between raw trade logs and realistic live performance:
 
-# Contact me
-<a href="https://twitter.com/oyesindhi_?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @oyesindhi_</a>
+1. **Multi-Portfolio Ingestion:** Merge and analyze up to 5 Excel trade logs simultaneously (or explore immediately using the built-in sample dataset).
+2. **3-Tier Reality Check:** Compares **Raw P&L**, **After-Slippage P&L**, and **Net P&L (After Indian Market Costs)** side-by-side across 25+ institutional performance metrics.
+3. **Statistical Stress Testing:** Runs a 10,000-iteration Monte Carlo simulation to estimate worst-case drawdown percentiles beyond what the historical sequence alone shows.
 
-<a href="https://twitter.com/intent/tweet?screen_name=oyesindhi_&ref_src=twsrc%5Etfw" class="twitter-mention-button" data-size="large" data-show-count="false">Give a shoutout to @oyesindhi_</a>
+---
 
-# How to use the tool?
+## ✨ Key Features
 
-1.	You have to upload your backtesting / trading journal in an Excel (XLSX) format. No other format will work (not even CSV). You can upload up to 5 excel files which means you can analyze data of 5 strategies combined like a portfolio.
+- **Multi-Portfolio Consolidation:** Upload and concatenate 1 to 5 `.xlsx` trade journals sorted chronologically, with a fallback sample dataset (`Data/default.xlsx`) for instant demoing.
+- **Dynamic Filtering:** Slice performance by **Day of Week**, **Month**, and **Year**, alongside configurable **Starting Capital**, **Slippage (%)**, and **Brokerage per Order**.
+- **Indian Options Cost Engine:** Automatically models brokerage, Options STT, NSE transaction charges, SEBI turnover fees, Stamp Duty, and 18% GST per trade.
+- **25+ Performance & Risk Metrics:** Computes Total P&L, Win Rate, Avg Risk-to-Reward, Max Drawdown (`₹` & `%`), Time Drawdown (in trades), Longest Win/Loss Streaks, Profit Factor, Expectancy, Calmar Ratio, Sharpe Ratio, Sortino Ratio, Kelly Criterion (`%`), and CAGR across all three cost tiers.
+- **Interactive Visualizations:**
+  - Win/Loss breakdown pie charts (Raw vs. Slippage vs. Net)
+  - Overlaid Cumulative Equity Curve & Drawdown charts
+  - Grouped Trade-wise P&L bar chart
+  - Day-wise, Month-wise, and Year-wise P&L attribution charts
+  - Daily P&L percentage distribution histogram
+- **10,000-Run Monte Carlo Simulation:** Randomly reshuffles trade returns to plot an empirical cumulative distribution (ECDF) of drawdowns and outputs 10th–95th percentile drawdown benchmarks against the historical backtest drawdown.
+- **One-Click CSV Export:** Download the enriched dataset (including computed slippages, itemized taxes/charges, and net P&L) as `data.csv`.
 
-![upload file](https://user-images.githubusercontent.com/78555897/214491772-e1a123b5-3f0f-434c-8e50-70e62933cffd.gif)
+---
 
-Note: make sure to write column headers of XLSX file as it is. Highly case sensitive.
+## 🛠️ Tech Stack
 
-![image](https://user-images.githubusercontent.com/78555897/214491922-3c249dea-c7ac-43b6-9f26-4f9e37289841.png)
+| Component | Technology |
+| :--- | :--- |
+| **Language** | Python |
+| **Frontend / UI** | Streamlit |
+| **Data Processing** | Pandas, NumPy, SciPy |
+| **Visualizations** | Plotly, Matplotlib, Seaborn |
+| **Excel Parsing** | `openpyxl` (via Pandas) |
 
+---
 
-2.	You need to specify capital for the strategy / set of strategies. Metrics in % will be shown accordingly.
+## 📂 Expected Input Format
 
-![add capital](https://user-images.githubusercontent.com/78555897/214492397-d32aec1b-617c-4f80-a66c-961543db22ef.gif)
+Upload `.xlsx` files containing the following columns:
 
+| `date` | `buy_price` | `sell_price` | `qty` |
+| :--- | :--- | :--- | :--- |
+| `2024-01-02` | `120.50` | `135.00` | `50` |
+| `2024-01-03` | `98.00` | `91.25` | `50` |
 
-3.	You need to specify slippages in %. Slippages are applied on both entries and exits.
+---
 
-4.	You need to specify brokerage per order in rupees ₹. As of now, I have only made it as per brokerage per order plan and not other plans (fixed monthly brokerage, etc). If you trade with a “free brokerage plan”, just leave the brokerage option 0.
+## 🚀 Getting Started
 
-![add slippage  brokerage](https://user-images.githubusercontent.com/78555897/214492463-905cbcb1-9996-40d5-a64f-f37e8aab3f7f.gif)
+### Prerequisites
+- Python 3.8 or higher
+- `pip` package manager
 
-# Credits
+### Installation & Setup
 
-I have created this app using python with streamlit.
-The code used for calculation of Monte Carlo Simulation is taken from <a href="https://twitter.com/ankit_quant?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-count="false">@ankit_quant</a> Medium post. Link to post - https://medium.com/@ankit_quant/when-to-stop-trading-a-strategy-28d104bb20b6
+1. **Clone the repository**
+   ```bash
+   git clone [https://github.com/shubhamharwani/](https://github.com/shubhamharwani/)<repo-name>.git
+   cd <repo-name>
+   ```
 
-# Note
+2. **Install dependencies**
+   ```bash
+   pip install streamlit pandas numpy plotly matplotlib seaborn scipy openpyxl
+   ```
+   *(Or if using a `requirements.txt` file: `pip install -r requirements.txt`)*
 
-If you think we can make it more better by adding some features, please feel free to DM on twitter.
+3. **Run the application**
+   ```bash
+   streamlit run app.py
+   ```
 
-<a href="https://twitter.com/oyesindhi_?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-size="large" data-show-count="false">Follow @oyesindhi_</a>
+---
+
+## 🗺️ Roadmap & Planned Enhancements
+
+- [ ] **Modularize Metric Calculations:** Refactor the Raw, Slippage, and Net P&L blocks into a reusable helper function to eliminate code duplication.
+- [ ] **Configurable Cost Presets:** Add toggleable statutory charge profiles for Equity Intraday, Equity Delivery, and Futures alongside Options.
+- [ ] **Caching for Monte Carlo:** Cache simulation results with `@st.cache_data` and allow users to customize the number of simulation runs (e.g., 1,000 to 25,000).
+- [ ] **CSV Upload Support:** Accept both `.csv` and `.xlsx` trade logs.
+
+---
+
+## 🙏 Acknowledgments
+
+- Monte Carlo drawdown simulation methodology adapted from [Ankit Garg (@Ankit_Quant)](https://medium.com/@ankit_quant/when-to-stop-trading-a-strategy-28d104bb20b6).
+
+---
+
+## ⚠️ Disclaimer
+
+This tool is built for educational and research purposes only and does not constitute financial or investment advice.
+
+---
+
+## 👤 Author
+
+**Shubham Harwani**  
+- GitHub: [@shubhamharwani](https://github.com/shubhamharwani)  
+- Twitter/X: [@oyesindhi_](https://twitter.com/oyesindhi_)
