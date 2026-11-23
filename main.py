@@ -19,7 +19,7 @@ st.set_page_config(page_title='Trade Log Dashboard', page_icon=':bar_chart:', la
 
 # instructions video
 st.sidebar.subheader('Instructions:')
-git_url = 'https://github.com/oyesindhi/backtest_analyzer'
+git_url = 'https://github.com/shubhamharwani/backtest_analyzer'
 st.sidebar.markdown(f'<a href={git_url}><button style="background-color:#FF4B4B;">Read Documentation</button></a>',unsafe_allow_html=True)
 
 # sidebar header
